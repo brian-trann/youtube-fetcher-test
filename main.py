@@ -19,9 +19,9 @@ class YouTubeAPI:
         else:
             raise ValueError("No channel found for the provided username.")
     
-    def get_latest_videos(self, channel_id):
+    def get_latest_videos(self, channel_id, hours):
         now = datetime.utcnow()
-        yesterday = now - timedelta(days=1)
+        time_delta = now - timedelta(hours=hours)
         published_after = yesterday.isoformat("T") + "Z"
 
         request = self.youtube.search().list(
@@ -72,7 +72,7 @@ if __name__ == '__main__':
     try:
         channel_id = youtube_api.get_channel_id(username)
         
-        latest_videos = youtube_api.get_latest_videos(channel_id)
+        latest_videos = youtube_api.get_latest_videos(channel_id, 24)
         
         for video_id in latest_videos:
             video_details = youtube_api.get_video_details(video_id)
